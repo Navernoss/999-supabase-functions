@@ -10,26 +10,25 @@ import { botAiKoshey } from "../_shared/telegram/bots.ts";
 /// <reference types="https://esm.sh/@supabase/functions-js/src/edge-runtime.d.ts" />
 
 Deno.serve(async (req) => {
-  console.log('Hello from heygen-video', req)
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: { ...corsHeaders, ...headers } });
   }
   const data = await req.json();
-  console.log(data,'data')
+  console.log(data, "data");
 
   if (data.event_type === "avatar_video.success") {
     const videoUrl = data.event_data.url;
-    console.log(videoUrl,'videoUrl')
+    console.log(videoUrl, "videoUrl");
     const video_id = data.event_data.video_id;
-    console.log(video_id,'video_id')
+    console.log(video_id, "video_id");
     const videoData = await getVideoWithChatId(video_id);
-    console.log(videoData,'videoData')
+    console.log(videoData, "videoData");
 
-    if (!videoData) throw new Error('Video not found')
-    const { chat_id } = videoData
-    console.log(chat_id,'chat_id')
+    if (!videoData) throw new Error("Video not found");
+    const { chat_id } = videoData;
+    console.log(chat_id, "chat_id");
     try {
-      await setVideoUrl(video_id, videoUrl)
+      await setVideoUrl(video_id, videoUrl);
       await botAiKoshey.api.sendVideo(chat_id, videoUrl);
     } catch (error) {
       console.error("Error sending video:", error);
@@ -63,4 +62,3 @@ Deno.serve(async (req) => {
 */
 
 // supabase functions deploy heygen-video --no-verify-jwt
-

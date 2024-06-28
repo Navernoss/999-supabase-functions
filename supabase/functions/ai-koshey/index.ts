@@ -403,7 +403,7 @@ botAiKoshey.command("soul", async (ctx) => {
 // Обработчик команды "start"
 botAiKoshey.command("start", async (ctx: AiKosheyContext) => {
   await ctx.replyWithChatAction("typing");
-  console.log(ctx.from?.language_code, "ctx.from.language_code")
+  
 
   const params = ctx?.message?.text && ctx?.message?.text.split(" ")[1];
 
