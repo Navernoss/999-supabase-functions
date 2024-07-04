@@ -1,5 +1,6 @@
+// deno-lint-ignore-file
 // Setup type definitions for built-in Supabase Runtime APIs
-/// <reference types="https://esm.sh/@supabase/functions-js/src/edge-runtime.d.ts" />
+/// <reference types="https://esm.sh/v135/@supabase/functions-js@2.4.1/src/edge-runtime.d.ts" />
 
 import {
   Context,
@@ -10,6 +11,7 @@ import {
 import { checkSubscription } from "../check-subscription.ts";
 import { delay } from "../_shared/constants.ts";
 import { createUser } from "../_shared/nextapi/index.ts";
+import { createQuestion } from "../_shared/openai/createQuestion.ts";
 import {
   AiKosheyContext,
   botAiKoshey,
@@ -17,6 +19,7 @@ import {
   bugCatcherRequest,
   handleUpdateAiKoshey,
 } from "../_shared/telegram/bots.ts";
+
 import {
   checkAndReturnUser,
   checkUsernameCodes,
@@ -40,7 +43,6 @@ import {
 } from "../_shared/supabase/passport.ts";
 import { PassportUser, RoomNode } from "../_shared/types/index.ts";
 import {
-  createVoiceSyncLabs,
   getAiFeedbackFromSupabase,
 } from "../_shared/supabase/ai.ts";
 import { createVideo } from "../_shared/heygen/index.ts";
@@ -694,6 +696,34 @@ botAiKoshey.command("bots", async (ctx) => {
   return;
 });
 
+botAiKoshey.command("getchatid", async (ctx) => {
+  await ctx.replyWithChatAction("typing");
+  if (!ctx.from) throw new Error("User not found");
+  const lang = await isRu(ctx)
+  const chatId = ctx.message?.chat.id
+  await ctx.reply(lang ? `Текущий id чата: ${chatId}` : `Current chat id: ${chatId}`)
+  return 
+})
+
+botAiKoshey.command("postjs", async (ctx) => {
+  await ctx.replyWithChatAction("typing");
+  if (!ctx.from) throw new Error("User not found");
+  const lang = await isRu(ctx)
+  const chatId = "1852726961";
+  const answer = await createQuestion(ctx.from?.language_code || "ru")
+  if (!answer) throw new Error("Answer not found")
+  console.log(answer)
+  const {question, a, b, c, correct: correct_option_id, explanation} = JSON.parse(answer)
+  await ctx.api.sendPoll(chatId, 
+    question,
+    [a, b, c],
+    {
+      correct_option_id,
+      explanation: explanation
+    }) 
+    return 
+})
+
 botAiKoshey.command("soul", async (ctx) => {
   await ctx.replyWithChatAction("typing");
   if (!ctx.from) throw new Error("User not found");
@@ -1207,6 +1237,7 @@ botAiKoshey.on("message:voice", async (ctx) => {
 });
 
 botAiKoshey.on("message:text", async (ctx: Context) => {
+  if (ctx.message?.text?.startsWith("/")) return ;
   await ctx.replyWithChatAction("typing");
   const inviter = ctx?.message?.text;
   const message = ctx.update.message;
@@ -2178,7 +2209,13 @@ await botAiKoshey.api.setMyCommands([
     command: "/python",
     description: "🐍 Learn Python",
   },
+  {
+    command: "/getchatid",
+    description: "Get chat ID",
+  }
 ]);
+
+
 
 botAiKoshey.catch((err) => {
   const ctx = err.ctx;
