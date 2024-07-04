@@ -618,6 +618,14 @@ botAiKoshey.command("python", async (ctx) => {
   }
 });
 
+botAiKoshey.command("soet", async (ctx) => {
+  console.log("soet");
+  await ctx.replyWithChatAction("typing");
+  if (!ctx.from) throw new Error("User not found");
+  await ctx.reply("https://t.me/+h7iBVTTSou04NGRi")
+  return;
+})
+
 botAiKoshey.command("post", async (ctx) => {
   if (!ctx.from) throw new Error("User not found");
   const lang = await isRu(ctx);
@@ -1013,22 +1021,16 @@ botAiKoshey.on("message:successful_payment", async (ctx) => {
   if (!ctx.from?.username) throw new Error("No username");
   const user_id = await getUid(ctx.from.username);
   if (!user_id) throw new Error("No user_id");
-  await sendPaymentInfo(user_id, level);
-  const levelForMessage = level === "fire"
-    ? lang ? "🔥 Огонь" : "🔥 Fire"
-    : level === "water"
-    ? lang ? "💧 Вода" : "💧 Water"
-    : lang
-    ? "🎺 Медные трубы"
-    : "🎺 Copper pipes";
-  await ctx.reply(
-    lang ? "🤝 Спасибо за покупку!" : "🤝 Thank you for the purchase!",
-  );
-  const textToPost = lang
-    ? `🪙 В казну тридевятого царства прибыло\n\n @${ctx.from.username} спасибо за покупку уровня ${levelForMessage}, добрый человек!`
-    : `🪙 @${ctx.from.username} thank you for the purchase level ${levelForMessage}!`;
-  await ctx.api.sendMessage("-1001476314188", textToPost);
-  await ctx.api.sendMessage("-1001729610573", textToPost);
+  await sendPaymentInfo(user_id, level)
+  const levelForMessage = level === "fire" ? lang ? "🔥 Огонь" : "🔥 Fire" : level === "water" ? lang ? "💧 Вода" : "💧 Water" : lang ? "🎺 Медные трубы" : "🎺 Copper pipes"
+  await ctx.reply(lang ? "🤝 Спасибо за покупку!" : "🤝 Thank you for the purchase!");
+  const textToPost = lang ? `<b>🪙 В казну тридевятого царства прибыло</b>\n\n @${ctx.from.username} спасибо за покупку уровня <b>${levelForMessage}</b>, добрый человек!` : `🪙 @${ctx.from.username} thank you for the purchase level <b>${levelForMessage}</b>!`
+  await ctx.api.sendMessage("-1001476314188", textToPost, {
+    parse_mode: "HTML",
+  })
+  await ctx.api.sendMessage("-1001729610573", textToPost, {
+    parse_mode: "HTML",
+  })
   return;
 });
 
