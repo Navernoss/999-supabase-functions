@@ -432,3 +432,58 @@ export async function getLanguage(telegram_id: string): Promise<string | null> {
     throw new Error("Error getLanguage: " + error);
   }
 }
+
+export async function getMode(telegram_id: string): Promise<string> {
+  try {
+    const { data, error } = await supabase
+      .from("users")
+      .select("mode")
+      .eq("telegram_id", telegram_id)
+      .single();
+      if (error) {
+        throw new Error("Error getMode: " + error);
+    }
+      return data?.mode
+  } catch (e) {
+    throw new Error("Error getMode: " + e);
+  }
+}
+
+export async function setMode(telegram_id: string, mode: string): Promise<void> {
+  try {
+    const { error } = await supabase
+      .from("users")
+      .update({ mode })
+      .eq("telegram_id", telegram_id)
+      if (error) throw new Error("Error getMode: " + error);
+    } catch (e) {
+    throw new Error("Error getMode: " + e);
+  }
+}
+
+export async function getModel(telegram_id: string): Promise<string> {
+  try {
+    const { data, error } = await supabase
+      .from("users")
+      .select("model")
+      .eq("telegram_id", telegram_id)
+      .single();
+
+      if (error || !data) throw new Error("Error getModel: " + error)
+      return data?.model
+  } catch (error) {
+    throw new Error("Error getModel: " + error);
+  }
+}
+
+export async function setModel(telegram_id: string, model: string) {
+  try {
+    const { data, error } = await supabase
+      .from("users")
+      .update({ model })
+      .eq("telegram_id", telegram_id)
+      .select("*");
+  } catch (error) {
+    throw new Error("Error setModel: " + error);
+  }
+}
