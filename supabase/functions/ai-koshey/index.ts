@@ -1402,8 +1402,19 @@ botAiKoshey.on("message:text", async (ctx: Context) => {
     }
   } else {
     await ctx.replyWithChatAction("typing");
+    if (ctx.message?.text?.startsWith("/")) return;
     const query = ctx?.message?.text;
 
+    const {isUserExist} = await checkAndReturnUser(ctx.from.id.toString())
+    if (!isUserExist) {
+      await ctx.reply(await textError(ctx), {
+        reply_markup: {
+          force_reply: true,
+        },
+      });
+      return;
+    }
+    
     const username = ctx?.update?.message?.from?.username;
 
     if (!username || !language_code) return;
