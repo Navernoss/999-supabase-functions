@@ -1078,18 +1078,17 @@ botAiKoshey.command("face", async (ctx) => {
   await ctx.reply(lang ? "Чтобы использовать данную функцию, необходимо приобрести уровень water 🌊" : "To use this function, you need to purchase the water level 🌊")
 })
 
-botAiKoshey.command("brain", async (ctx) => {
-  console.log("brain");
+botAiKoshey.command("model", async (ctx) => {
+  console.log("model");
   await ctx.replyWithChatAction("typing");
   if (!ctx.from) throw new Error("User not found");
   const lang = await isRu(ctx)
   // await ctx.reply(lang ? "Чтобы использовать данную функцию, необходимо приобрести уровень water 🌊" : "To use this function, you need to purchase the water level 🌊")
-  await ctx.reply(lang ? "Выберите модель" : "Select a model", {
+  await ctx.reply(lang ? "🧠 Выберите модель ИИ" : "🧠Select Model Ai", {
     reply_markup: {
       inline_keyboard: [
-        [{ text: "GPT-4", callback_data: "model_gpt-4" }],
-        [{ text: "GPT-4o", callback_data: "model_gpt-4o" }],
-        [{ text: "GPT-4-turbo", callback_data: "model_gpt-4-turbo"}]
+        [{ text: "GPT-4", callback_data: "model_gpt-4" }, { text: "GPT-4o", callback_data: "model_gpt-4o" }, { text: "GPT-4-turbo", callback_data: "model_gpt-4-turbo"}],
+        [{ text: "GPT-3.5-turbo", callback_data: "model_gpt-3.5-turbo"}],
       ],
     },
   })
@@ -1114,7 +1113,7 @@ botAiKoshey.command("mode", async (ctx) => {
   await ctx.replyWithChatAction("typing");
   if (!ctx.from) throw new Error("User not found");
   const lang = await isRu(ctx);
-  await ctx.reply(`${lang ? "Выберите режим:" : "Select mode:"}`, {
+  await ctx.reply(`${lang ? "📳 Выберите режим общения с ИИ" : "📳 Select AI communication mode"}`, {
     reply_markup: {
       inline_keyboard: [
         [
@@ -1862,7 +1861,7 @@ botAiKoshey.on("callback_query:data", async (ctx) => {
     const model = callbackData.split("_")[1];
     console.log(model, "model");
     await setModel(telegram_id, model);
-    await ctx.reply(lang ? `Вы выбрали модель ${model}` : `You selected the model ${model}`);
+    await ctx.reply(lang ? `🔋 Вы выбрали модель ${model}` : `🔋 You selected the model ${model}`);
     return;
   }
 
@@ -2095,8 +2094,12 @@ await botAiKoshey.api.setMyCommands([
     description: "🤓 Add avatar's face",
   },
   {
-    command: "/brain",
-    description: "🧠 Add avatar's brain",
+    command: "/mode",
+    description: "📳 Select AI communication mode",
+  },
+  {
+    command: "/model",
+    description: "🧠 Add avatar's model",
   },
   // {
   //   command: "/text_to_speech",
