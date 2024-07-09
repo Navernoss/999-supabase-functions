@@ -1,6 +1,6 @@
 import {
   model_ai,
-  SITE_URL,
+  SUPABASE_URL,
   SYNC_LABS_API_KEY,
   // XI_API_KEY,
 } from "../constants.ts";
@@ -10,6 +10,7 @@ import {
   createVoiceT,
   getAiFeedbackT,
   getAiSupabaseFeedbackT,
+  SpeakResponse,
 } from "../types/index.ts";
 import { supabase, supabaseInvoke } from "./index.ts";
 
@@ -227,7 +228,7 @@ export async function createVoiceSyncLabs(
     name: username,
     description: `Voice created from Telegram voice message`,
     inputSamples: [fileUrl],
-    webhookUrl: `${SITE_URL}/functions/v1/synclabs-video`,
+    webhookUrl: `${SUPABASE_URL}/functions/v1/synclabs-video`,
   });
   console.log(body, "body");
   console.log(SYNC_LABS_API_KEY, "SYNC_LABS_API_KEY");
@@ -256,6 +257,60 @@ export async function createVoiceSyncLabs(
   }
 }
 
+export async function isVoiceId(voiceId: string) {
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("voice_id_synclabs", voiceId)
+    .single();
+  if (error || !data) return false;
+  return true;
+}
+
+export async function getUserByVoiceId(voiceId: string) {
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("voice_id_synclabs", voiceId)
+    .single();
+
+  if (error) {
+    throw new Error(`Failed to fetch user: ${error.message}`);
+  }
+
+  return data;
+};
+
+export async function createSpeech(text: string, voiceId: string): Promise<SpeakResponse> {
+  const url = "https://api.synclabs.so/speak";
+  const body = JSON.stringify({
+    transcript: text,
+    voiceId: voiceId,
+    webhookUrl: `${SUPABASE_URL}/functions/v1/synclabs-audio`,
+  });
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': SYNC_LABS_API_KEY as string,
+      },
+      body,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error creating speech: ${response.statusText}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error('Error creating speech:', error);
+    throw new Error('Failed to create speech');
+  }
+}
+
 // export const deleteVoice = async (voiceId: string) => {
 //   const XI_API_KEY = Deno.env.get("XI_API_KEY");
 
@@ -276,19 +331,19 @@ export async function createVoiceSyncLabs(
 //   return await response.json();
 // };
 
-// export const getVoiceId = async (telegramId: string) => {
-//   const { data, error } = await supabase
-//     .from("users")
-//     .select("voice_id_elevenlabs")
-//     .eq("telegram_id", telegramId)
-//     .single();
+export async function getVoiceId(telegram_id: string) {
+  const { data, error } = await supabase
+    .from("users")
+    .select("voice_id_synclabs")
+    .eq("telegram_id", telegram_id)
+    .single();
 
-//   if (error) {
-//     throw new Error(`Failed to fetch voice_id_elevenlabs: ${error.message}`);
-//   }
+  if (error) {
+    throw new Error(`Failed to fetch voice_id_synclabs: ${error.message}`);
+  }
 
-//   return data.voice_id_elevenlabs;
-// };
+  return data.voice_id_synclabs;
+};
 
 // export const createVoiceMessage = async (
 //   text: string,

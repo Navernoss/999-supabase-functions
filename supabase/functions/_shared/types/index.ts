@@ -16,6 +16,7 @@ export type SupabaseUser = TUser & {
   language_code?: string | null;
   telegram_id?: number | null;
   email?: string | null;
+  chat_id?: number | null;
   created_at?: Date;
   aggregateverifier?: string | null;
   admin_email?: string | null;
@@ -285,6 +286,19 @@ export interface getAiSupabaseFeedbackT {
 export interface createVoiceT {
   fileUrl: string;
   username: string;
+}
+
+export interface SpeakResponse {
+  id: string;
+  createdAt: string;
+  status: string;
+  step: any;
+  audioUrl: string;
+  transcriptUrl: string;
+  voiceId: string;
+  creditsDeducted: number;
+  webhookUrl: string;
+  errorMessage: string;
 }
 
 export interface UserProfile {
