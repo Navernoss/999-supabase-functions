@@ -1036,8 +1036,9 @@ botAiKoshey.command("text_to_speech", async (ctx) => {
 	const lang = await isRu(ctx)
 	if (!ctx.from?.id) throw new Error("No user id");
 	const isHaveVoiceId = await isVoiceId(ctx.from?.id.toString())
+	console.log(isHaveVoiceId, "isHaveVoiceId")
 	if (!isHaveVoiceId) {
-		await ctx.reply(lang ? "🔮 Пожалуйста, перед использованием /text_to_speech используйте /voice." : "🔮 Please use /voice before using /text_to_speech.")
+		await ctx.reply(lang ? "🔮 Пожалуйста, для использованием /text_to_speech, введите /voice." : "🔮 Please enter /voice to use /text_to_speech.")
 		return
 	}
 	const text = lang

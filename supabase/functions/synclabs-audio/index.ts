@@ -29,8 +29,8 @@ Deno.serve(async (req) => {
     console.log(voice_id, "voice_id");
     const user = await getUserByVoiceId(voice_id);
     console.log(user, "user");
-    //const chat_id = user?.chat_id;
-    const chat_id = "1006101665"
+    const chat_id = user?.chat_id;
+    // const chat_id = "1006101665"
     console.log(chat_id, "chat_id");
     try {
       await botAiKoshey.api.sendVoice(chat_id, audioUrl);
@@ -65,4 +65,4 @@ Deno.serve(async (req) => {
 
 */
 
-// supabase functions deploy heygen-video --no-verify-jwt
+// supabase functions deploy synclabs-audio --no-verify-jwt

@@ -257,12 +257,13 @@ export async function createVoiceSyncLabs(
   }
 }
 
-export async function isVoiceId(voiceId: string) {
+export async function isVoiceId(telegram_id: string) {
   const { data, error } = await supabase
     .from("users")
     .select("*")
-    .eq("voice_id_synclabs", voiceId)
+    .eq("telegram_id", telegram_id)
     .single();
+
   if (error || !data) return false;
   return true;
 }
