@@ -10,10 +10,9 @@ import {
 import { checkSubscription } from "../check-subscription.ts";
 import { createUser } from "../_shared/nextapi/index.ts";
 import {
-	AiKosheyContext,
-	botAiKoshey,
+	botNeuroCoder,
 	bugCatcherRequest,
-	handleUpdateAiKoshey,
+	handleUpdateNeuroCoder,
 } from "../_shared/telegram/bots.ts";
 import { createQuestion } from "../_shared/openai/createQuestion.ts";
 import { answerAi } from "../_shared/openai/answerAi.ts"
@@ -62,6 +61,8 @@ const isRu = async (ctx: Context) => {
 
 const videoUrl = (isRu: boolean) => isRu ? "https://t.me/dao999nft_storage/5" : "https://t.me/dao999nft_storage/6";
 
+const mediaChatId = (lang: boolean) => lang ? "-1001483746067" : "-1002015840738"
+
 const textError = async (ctx: Context) => {
 	if (!ctx.from) throw new Error("User not found");
 	const lang = await isRu(ctx)
@@ -74,7 +75,7 @@ const textError = async (ctx: Context) => {
 
 const welcomeMenu = async (ctx: Context) => {
 	console.log("✅welcomeMenu");
-	await ctx.replyWithChatAction("upload_video"); // Отправка действия загрузки видео в чате
+	await ctx.replyWithChatAction("upload_video");
 	if (!ctx.from) throw new Error("User not found");
 	const lang = await isRu(ctx)
 	const text = lang
@@ -87,16 +88,16 @@ const welcomeMenu = async (ctx: Context) => {
 			inline_keyboard: [
 				[
 					{
-						text: `🔥 ${lang ? "Огонь" : "Fire"}`,
-						callback_data: "fire",
+						text: `${lang ? "НейроСам" : "NeuroSelf"}`,
+						callback_data: "neuro_self",
 					},
 					{
-						text: `💧 ${lang ? "Вода" : "Water"}`,
-						callback_data: "water",
+						text: `${lang ? "НейроУрок" : "NeuroLesson"}`,
+						callback_data: "neuro_lesson",
 					},
 					{
-						text: `🎺 ${lang ? "Медные трубы" : "Copper pipes"}`,
-						callback_data: "copper_pipes",
+						text: `${lang ? "НейроБоты" : "NeuroBots"}`,
+						callback_data: "neuro_bots",
 					},
 				],
 			],
@@ -155,7 +156,7 @@ const menuButton = async (ctx: Context) => {
 	return menuButton;
 };
 
-botAiKoshey.command("neuro", async (ctx) => {
+botNeuroCoder.command("neuro", async (ctx) => {
 	console.log("neuro");
 	await checkAndUpdate(ctx)
 	await ctx.replyWithChatAction("typing");
@@ -189,11 +190,10 @@ botAiKoshey.command("neuro", async (ctx) => {
 					user_id: user_id.toString(),
 					language: "all",
 				});
-				// Формируем сообщение
+
 				const messageText =
 					`${topic}\n\n<i><u>${lang ? "Теперь мы предлагаем вам закрепить полученные знания." : "Now we are offering you to reinforce the acquired knowledge."}</u></i>\n\n<b>${lang ? "Total: " : "Total: "}${allAnswers} $IGLA</b>`;
 
-				// Формируем кнопки
 				const inlineKeyboard = [
 					[{
 						text: lang ? "Перейти к вопросу" : "Go to the question",
@@ -206,7 +206,6 @@ botAiKoshey.command("neuro", async (ctx) => {
 					await ctx.replyWithVideoNote(url);
 				}
 				if (image_lesson_url) {
-					// Отправляем сообщение
 					await ctx.replyWithPhoto(image_lesson_url || "", {
 						caption: messageText,
 						parse_mode: "HTML",
@@ -228,7 +227,7 @@ botAiKoshey.command("neuro", async (ctx) => {
 		}
 });
 
-botAiKoshey.command("javascript", async (ctx) => {
+botNeuroCoder.command("javascript", async (ctx) => {
 	console.log("javascript");
 	await checkAndUpdate(ctx)
 	const theme = ctx.message?.text.substring(1)
@@ -267,11 +266,9 @@ botAiKoshey.command("javascript", async (ctx) => {
 					user_id: user_id.toString(),
 					language: "all",
 				});
-				// Формируем сообщение
 				const messageText =
 					`${topic}\n\n<i><u>${lang ? "Теперь мы предлагаем вам закрепить полученные знания." : "Now we are offering you to reinforce the acquired knowledge."}</u></i>\n\n<b>${lang ? "Total: " : "Total: "}${allAnswers} $IGLA</b>`;
 
-				// Формируем кнопки
 				const inlineKeyboard = [
 					[{
 						text: lang ? "Перейти к вопросу" : "Go to the question",
@@ -284,7 +281,6 @@ botAiKoshey.command("javascript", async (ctx) => {
 					await ctx.replyWithVideoNote(url);
 				}
 				if (image_lesson_url) {
-					// Отправляем сообщение
 					await ctx.replyWithPhoto(image_lesson_url || "", {
 						caption: messageText,
 						parse_mode: "HTML",
@@ -306,7 +302,7 @@ botAiKoshey.command("javascript", async (ctx) => {
 		}
 });
 
-botAiKoshey.command("typescript", async (ctx) => {
+botNeuroCoder.command("typescript", async (ctx) => {
 	console.log("typescript");
 	await checkAndUpdate(ctx)
 	const theme = ctx.message?.text.substring(1)
@@ -384,7 +380,7 @@ botAiKoshey.command("typescript", async (ctx) => {
 		}
 });
 
-botAiKoshey.command("reactnative", async (ctx) => {
+botNeuroCoder.command("reactnative", async (ctx) => {
 	console.log("reactnative");
 	await checkAndUpdate(ctx)
 	const theme = ctx.message?.text.substring(1)
@@ -462,7 +458,7 @@ botAiKoshey.command("reactnative", async (ctx) => {
 		}
 });
 
-botAiKoshey.command("python", async (ctx) => {
+botNeuroCoder.command("python", async (ctx) => {
 	console.log("python");
 	await checkAndUpdate(ctx)
 	const theme = ctx.message?.text.substring(1)
@@ -540,7 +536,7 @@ botAiKoshey.command("python", async (ctx) => {
 		}
 });
 
-botAiKoshey.command("post", async (ctx) => {
+botNeuroCoder.command("post", async (ctx) => {
 	await checkAndUpdate(ctx)
 	if (!ctx.from) throw new Error("User not found");
 	const lang = await isRu(ctx)
@@ -551,7 +547,7 @@ botAiKoshey.command("post", async (ctx) => {
 		`🌟 Добро пожаловать в мир наших удивительных ботов по обучению искусственному интеллекту, <b>JavaScript, TypeScript, React, Python и Tact! 🤖💡</b>\n\n🔍 Наши боты предлагают уникальную возможность заработать наш токен знаний $IGLA, погружаясь в мир новых технологий и углубляясь в востребованные навыки. 🚀\n\n💼 В отличие от других кликеров, наши боты позволяют пользователям проводить время с пользой, обучаясь навыкам, которые значительно повысят вашу профессиональную ценность на рынке труда.\n\n📚 Не упустите шанс улучшить свои знания и навыки, становясь более востребованным специалистом в сфере IT!\n\nПрисоединяйтесь к нам и начните свое преображение <b>прямо сейчас</b>!`;
 	const telegram_id = ctx.from?.id;
 	if (!telegram_id) throw new Error("No telegram id");
-	const chatMember = await botAiKoshey.api.getChatMember(chatId, telegram_id);
+	const chatMember = await botNeuroCoder.api.getChatMember(chatId, telegram_id);
 	const isAdmin = chatMember.status === "administrator" ||
 		chatMember.status === "creator";
 	if (!isAdmin) {
@@ -564,11 +560,11 @@ botAiKoshey.command("post", async (ctx) => {
 	}
 
 	try {
-		await botAiKoshey.api.sendVideo(chatId, videoUrl(lang), {
+		await botNeuroCoder.api.sendVideo(chatId, videoUrl(lang), {
 			caption: message,
 			parse_mode: "HTML",
 		});
-		await botAiKoshey.api.sendMessage(chatId, message_two, {
+		await botNeuroCoder.api.sendMessage(chatId, message_two, {
 			parse_mode: "HTML",
 			reply_markup: {
 				inline_keyboard: [[
@@ -602,7 +598,7 @@ botAiKoshey.command("post", async (ctx) => {
 	}
 });
 
-botAiKoshey.command("getchatid", async (ctx) => {
+botNeuroCoder.command("getchatid", async (ctx) => {
 	await checkAndUpdate(ctx)
 	await ctx.replyWithChatAction("typing");
 	if (!ctx.from) throw new Error("User not found");
@@ -613,7 +609,7 @@ botAiKoshey.command("getchatid", async (ctx) => {
 });
 
 // Обработчик команды "start"
-botAiKoshey.command("start", async (ctx: AiKosheyContext) => {
+botNeuroCoder.command("start", async (ctx) => {
 	await checkAndUpdate(ctx)
 	await ctx.replyWithChatAction("typing");
 	console.log(ctx.from?.language_code, "ctx.from.language_code")
@@ -628,17 +624,16 @@ botAiKoshey.command("start", async (ctx: AiKosheyContext) => {
 	console.log(await isRu(ctx), "isRu")
 	const lang = await isRu(ctx)
 
-	const chatIdSubscription = lang ? "-1002228291515" : "-1002015840738"
 	const isSubscription = await checkSubscription(
 		ctx,
 		ctx.from?.id,
-		chatIdSubscription
+		mediaChatId(lang)
 	);
 	if (!isSubscription) {
 		await ctx.reply(lang ? "Вы не подписаны на канал. Чтобы продолжить тест, нужно подписаться 👁‍🗨" : "You are not subscribed to the channel. To continue the test, you need to subscribe to the channel 👁‍🗨",
 			{
 				reply_markup: { inline_keyboard: [
-					[{ text: lang ? "👁‍🗨 Подписаться" : "👁‍🗨 Subscribe", url: lang ? "https://t.me/ai_koshey999nft" : "https://t.me/ai_koshey_en" }],
+					[{ text: lang ? "👁‍🗨 Подписаться" : "👁‍🗨 Subscribe", url: lang ? "https://t.me/neuro_coder_ai" : "https://t.me/ai_koshey_en" }],
 				] }
 				}
 			);
@@ -789,51 +784,33 @@ botAiKoshey.command("start", async (ctx: AiKosheyContext) => {
 	}
 });
 
-botAiKoshey.command("buy", async (ctx) => {
+botNeuroCoder.command("buy", async (ctx) => {
 	await checkAndUpdate(ctx)
 	const lang = await isRu(ctx)
-	ctx.reply(lang ? `<b>Огонь 🔥 - НейроСтарт - 432 ⭐️ в месяц</b>
-Чат с воспоминаниями + GPT-4o: Бот запоминает контекст и улучшает взаимодействие.
-Самостоятельное обучение: Курсы по нейросетям, JavaScript, TypeScript, React & React Native, Python.
-ИИ гуру ассистент: Доступ к виртуальному помощнику с использованием ИИ.
-Поддержка в чате: Помощь и ответы на вопросы в режиме реального времени.
+	ctx.reply(lang ? `<b>НейроСам - 55 ⭐️ в месяц</b>
 	
-<b>Вода 💧 - НейроБазис - Групповая сессия для начинающих - 4754 ⭐️ в месяц</b>
-Все, что в тарифе "Базовый Онлайн".
-Дополнительные ИИ функции: Включает в себя Чат GPT, Llama3, Mistral, HeyGen, Midjourney, Eleven Labs.
-4 групповые онлайн встречи с преподавателем: Еженедельные занятия, где можно задать вопросы и получить практические советы.
+<b>НейроУрок - 565 ⭐️ в месяц</b>
 	
-<b>Медные трубы 🎺 - НейроПродвинутый - Групповая сессия для продвинутых - 47 975 ⭐️ в месяц</b>
-Все, что в тарифе "Базовый Онлайн".
-12 групповых онлайн встреч с преподавателем: Интенсивное обучение с глубоким погружением в разработку телеграм ИИ ботов.`
-	 : `<b>Fire 🔥 - NeuroStart - 432 ⭐️ per month</b>
-Chat with memories + GPT-4o: The bot remembers the context and improves interaction.
-Self-paced learning: Courses on neural networks, JavaScript, TypeScript, React & React Native, Python.
-AI guru assistant: Access to a virtual assistant using AI.
-Chat support: Help and answers to questions in real-time.
+<b>НейроБоты - 5650 ⭐️ в месяц</b>`
+	 : `<b>NeuroSelf - 55 ⭐️ per month</b>
 	 
-<b>Water 💧 - NeuroBasic - Group session for beginners - 4754 ⭐️ per month</b>
-Everything in the "Basic Online" plan.
-Additional AI features: Includes Chat GPT, Llama3, Mistral, HeyGen, Midjourney, Eleven Labs.
-4 group online sessions with an instructor: Weekly classes where you can ask questions and get practical advice.
-	 
-<b>Copper Pipes 🎺 - NeuroAdvanced - Group session for advanced users - 47,975 ⭐️ per month</b>
-Everything in the "Basic Online" plan.
-12 group online sessions with an instructor: Intensive training with deep immersion in the development of Telegram AI bots.`, {
+<b>NeuroLesson - 565 ⭐️ per month</b>
+
+<b>NeuroBots - 5650 ⭐️ per month</b>`, {
 		reply_markup: {
-			inline_keyboard: [[{ text: lang ? "🔥 Огонь" : "🔥 Fire", callback_data: "buy_fire" }], [{ text: lang ? "🌊 Вода" : "🌊 Water", callback_data: "buy_water" }], [{ text: lang ? "🎺 Медные трубы" : "🎺 Copper pipes", callback_data: "buy_copper_pipes" }]],
+			inline_keyboard: [[{ text: lang ? "НейроСам" : "NeuroSelf", callback_data: "buy_self" }], [{ text: lang ? "НейроУрок" : "NeuroLesson", callback_data: "buy_lesson" }], [{ text: lang ? "НейроБоты" : "NeuroBots", callback_data: "buy_bots" }]],
 		},
 		parse_mode: "HTML",
 	})
 	return;
 });
 
-botAiKoshey.on("pre_checkout_query", (ctx) => {
+botNeuroCoder.on("pre_checkout_query", (ctx) => {
 	ctx.answerPreCheckoutQuery(true)
 	return;
 });
 
-botAiKoshey.on("message:successful_payment", async (ctx) => {
+botNeuroCoder.on("message:successful_payment", async (ctx) => {
 	await checkAndUpdate(ctx)
 	const lang = await isRu(ctx)
 	console.log("ctx 646(succesful_payment)", ctx)
@@ -842,15 +819,14 @@ botAiKoshey.on("message:successful_payment", async (ctx) => {
 	const user_id = await getUid(ctx.from.username)
 	if (!user_id) throw new Error("No user_id");
 	await sendPaymentInfo(user_id, level)
-	const levelForMessage = level === "fire" ? lang ? "🔥 Огонь" : "🔥 Fire" : level === "water" ? lang ? "💧 Вода" : "💧 Water" : lang ? "🎺 Медные трубы" : "🎺 Copper pipes"
+	const levelForMessage = level === "self" ? lang ? "НейроСам" : "NeuroSelf" : level === "lesson" ? lang ? "НейроУрок" : "NeuroLesson" : lang ? "НейроБоты" : "NeuroBots"
 	await ctx.reply(lang ? "🤝 Спасибо за покупку!" : "🤝 Thank you for the purchase!");
-	const textToPost = lang ? `🪙 В казну тридевятого царства прибыло\n\n @${ctx.from.username} спасибо за покупку уровня ${levelForMessage}, добрый человек!` : `🪙 @${ctx.from.username} thank you for the purchase level ${levelForMessage}!`
-	await ctx.api.sendMessage("-1001476314188", textToPost)
-	await ctx.api.sendMessage("-1001729610573", textToPost)
+	const textToPost = lang ? `🪙 @${ctx.from.username} спасибо за покупку уровня ${levelForMessage}!` : `🪙 @${ctx.from.username} thank you for the purchase level ${levelForMessage}!`
+	await ctx.api.sendMessage(mediaChatId(lang), textToPost)
 	return;
 });
 
-botAiKoshey.command("language", async (ctx) => {
+botNeuroCoder.command("language", async (ctx) => {
 	await checkAndUpdate(ctx)
 	await ctx.replyWithChatAction("typing");
 	if (!ctx.from) throw new Error("User not found");
@@ -866,7 +842,7 @@ botAiKoshey.command("language", async (ctx) => {
 	})
 });
 
-botAiKoshey.command("model", async (ctx) => {
+botNeuroCoder.command("model", async (ctx) => {
 	await checkAndUpdate(ctx)
 	console.log("model");
 	await ctx.replyWithChatAction("typing");
@@ -884,7 +860,7 @@ botAiKoshey.command("model", async (ctx) => {
 	return
 })
 
-botAiKoshey.command("top", async (ctx) => {
+botNeuroCoder.command("top", async (ctx) => {
 	await checkAndUpdate(ctx)
 	console.log("top");
 	await ctx.replyWithChatAction("typing");
@@ -900,7 +876,7 @@ botAiKoshey.command("top", async (ctx) => {
 	return
 })
 
-botAiKoshey.on("message:text", async (ctx: Context) => {
+botNeuroCoder.on("message:text", async (ctx: Context) => {
 	await checkAndUpdate(ctx)
 	if (ctx.message?.text?.startsWith("/")) return;
 	await ctx.replyWithChatAction("typing");
@@ -1009,7 +985,7 @@ botAiKoshey.on("message:text", async (ctx: Context) => {
 	return
 });
 
-botAiKoshey.on("callback_query:data", async (ctx) => {
+botNeuroCoder.on("callback_query:data", async (ctx) => {
 	await checkAndUpdate(ctx)
 	await ctx.replyWithChatAction("typing");
 	if (!ctx.from) throw new Error("User not found");
@@ -1023,36 +999,36 @@ botAiKoshey.on("callback_query:data", async (ctx) => {
 	const isHaveAnswer = callbackData.split("_").length === 4;
 
 	if (callbackData.startsWith("buy")) {
-		if (callbackData.endsWith("fire")) {
+		if (callbackData.endsWith("self")) {
 			await ctx.replyWithInvoice(
-				lang ? "🔥 Огонь" : "🔥 Fire",
-				lang ? "Вы получите подписку уровня 'Огонь'" : "You will receive a subscription to the 'Fire' level",
-				"fire",
-				"", // Оставьте пустым для цифровых товаров
-				"XTR", // Используйте валюту Telegram Stars
-				[{ label: "Цена", amount: 432 }],
+				lang ? "НейроСам" : "NeuroSelf",
+				lang ? "Вы получите подписку уровня 'НейроСам'" : "You will receive a subscription to the 'NeuroSelf' level",
+				"self",
+				"",
+				"XTR",
+				[{ label: "Цена", amount: 55 }],
 			);
 			return
 		}
-		if (callbackData.endsWith("water")) {
+		if (callbackData.endsWith("lesson")) {
 			await ctx.replyWithInvoice(
-				lang ? "🌊 Вода" : "🌊 Water",
-				lang ? "Вы получите подписку уровня 'Вода'" : "You will receive a subscription to the 'Water' level",
-				"water",
-				"", // Оставьте пустым для цифровых товаров
-				"XTR", // Используйте валюту Telegram Stars
-				[{ label: "Цена", amount: 4754 }], // Цена в центах (10.00 Stars)
+				lang ? "НейроУрок" : "NeuroLesson",
+				lang ? "Вы получите подписку уровня 'НейроУрок'" : "You will receive a subscription to the 'NeuroLesson' level",
+				"lesson",
+				"",	
+				"XTR",
+				[{ label: "Цена", amount: 565 }],
 			);
 			return
 		}
-		if (callbackData.endsWith("copper_pipes")) {
+		if (callbackData.endsWith("bots")) {
 			await ctx.replyWithInvoice(
-				lang ? "🎺 Медные трубы" : "🎺 Copper pipes",
-				lang ? "Вы получите подписку уровня 'Медные трубы'" : "You will receive a subscription to the 'Copper pipes' level",
-				"copper_pipes",
-				"", // Оставьте пустым для цифровых товаров
-				"XTR", // Используйте валюту Telegram Stars
-				[{ label: "Цена", amount: 47975 }], // Цена в центах (10.00 Stars)
+				lang ? "НейроБоты" : "NeuroBots",
+				lang ? "Вы получите подписку уровня 'НейроБоты'" : "You will receive a subscription to the 'NeuroBots' level",
+				"bots",
+				"",
+				"XTR",
+				[{ label: "Цена", amount: 5650 }],
 			);
 			return
 		}
@@ -1423,30 +1399,14 @@ botAiKoshey.on("callback_query:data", async (ctx) => {
 return
 });
 
-await botAiKoshey.api.setMyCommands([
+await botNeuroCoder.api.setMyCommands([
 	{
 		command: "/start",
-		description: "🚀 Start chatting with Ai Koshey",
+		description: "🚀 Start chatting with",
 	},
 	{
 		command: "/neuro",
 		description: "🧠 Start the neuro course",
-	},
-	{
-		command: "/language",
-		description: "🌐 Select language",
-	},
-	{
-		command: "/model",
-		description: "🧠 Add avatar's model",
-	},
-	{
-		command: "/top",
-		description: "🏆 Top 10 users",
-	},
-	{
-		command: "/buy",
-		description: "🛒 Buy subscription",
 	},
 	{
 		command: "/javascript",
@@ -1465,12 +1425,28 @@ await botAiKoshey.api.setMyCommands([
 		description: "🐍 Learn Python",
 	},
 	{
+		command: "/language",
+		description: "🌐 Select language",
+	},
+	{
+		command: "/model",
+		description: "🧠 Add avatar's model",
+	},
+	{
+		command: "/top",
+		description: "🏆 Top 10 users",
+	},
+	{
+		command: "/buy",
+		description: "🛒 Buy subscription",
+	},
+	{
 		command: "/getchatid",
 		description: "🆔 Get chat ID",
 	},
 ]);
 
-botAiKoshey.catch((err) => {
+botNeuroCoder.catch((err) => {
 	const ctx = err.ctx;
 	console.error(`Error while handling update ${ctx.update.update_id}:`);
 	const e = err.error;
@@ -1492,28 +1468,10 @@ Deno.serve(async (req) => {
 			return new Response("not allowed", { status: 405 });
 		}
 
-		return await handleUpdateAiKoshey(req);
+		return await handleUpdateNeuroCoder(req);
 	} catch (err) {
 		console.error(err);
 	}
 });
 
-// const textInvite = `${
-//   isRu
-//     ? `🏰 **Приглашение в Тридевятое Царство** 🏰\n\n[Нажми на ссылку чтобы присоединиться!](https://t.me/${botUsername}?start=${select_izbushka}_${username})\n\nПосле подключения к боту нажми на кнопку **Izbushka**, чтобы войти на видео встречу.`
-//     : `Invitation to the **DAO 999 NFT**\n\nPress the link to join!](https://t.me/${botUsername}?start=${select_izbushka}_${username})\n\nAfter connecting to the bot, press the **Izbushka** button to enter the video meeting.`
-// }`;
-// const buttons = [
-//   {
-//     text: `${
-//       isRu
-//         ? "Видео инструкция подключения"
-//         : "Video instruction for connecting"
-//     }`,
-//     web_app: {
-//       url: `https://youtube.com/shorts/YKG-1fdEtAs?si=ojKvK2DfPsZ0mbd5`,
-//     },
-//   },
-// ];
-
-// supabase functions deploy ai-koshey --no-verify-jwt
+// supabase functions deploy neuro-coder --no-verify-jwt
