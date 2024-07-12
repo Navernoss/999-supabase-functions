@@ -65,6 +65,9 @@ if (!Deno.env.get("TELEGRAM_BOT_BUG_CATCHER_DEV")) {
 if (!Deno.env.get("TELEGRAM_NEURO_CODER_TOKEN")) {
   throw new Error("TELEGRAM_NEURO_CODER_TOKEN is not set");
 }
+if (!Deno.env.get("TELEGRAM_NEURO_CALLS_TOKEN")) {
+  throw new Error("TELEGRAM_NEURO_CALLS_TOKEN is not set");
+}
 export const bugCatcherDevBotToken = Deno.env.get(
   "TELEGRAM_BOT_BUG_CATCHER_DEV",
 );
@@ -73,10 +76,12 @@ export const aiKosheyUrl = Deno.env.get("AI_KOSHEY_URL");
 export const aiKosheyFlowiseToken = Deno.env.get("AI_KOSHEY_FLOWISE_TOKEN");
 
 const tokenProd = Deno.env.get("TELEGRAM_BOT_TOKEN_AI_KOSHEY");
-const tokenProdNeuro = Deno.env.get("TELEGRAM_NEURO_CODER_TOKEN");
+const tokenProdNeuroCoder = Deno.env.get("TELEGRAM_NEURO_CODER_TOKEN");
+const tokenProdNeuroCalls = Deno.env.get("TELEGRAM_NEURO_CALLS_TOKEN");
 const tokenTest = Deno.env.get("TELEGRAM_BOT_TOKEN_AI_KOSHEY_TEST");
 export const supportChatId = Deno.env.get("SUPPORT_CHAT_ID");
 export const logBotToken = Deno.env.get("TELEGRAM_BOT_TOKEN_LOG");
+
 
 console.log(DEV, "DEV");
 const testBot = Deno.env.get("TEST_BOT");
@@ -85,7 +90,8 @@ console.log(botUsername, "botUsername");
 
 const token = DEV ? tokenTest : tokenProd;
 
-const neuroToken = DEV ? tokenTest : tokenProdNeuro
+const neuroCoderToken = DEV ? tokenTest : tokenProdNeuroCoder
+const neuroCallsToken = DEV ? tokenTest : tokenProdNeuroCalls
 interface SessionData {
   id?: string;
   session?: string;
@@ -99,9 +105,11 @@ interface Message {
   session_id: string;
 }
 if (!token) throw new Error("Token Ai Koshy is not set");
-if (!neuroToken) throw new Error("Token NeuroCoder is not set")
+if (!neuroCoderToken) throw new Error("Token NeuroCoder is not set")
+if (!neuroCallsToken) throw new Error("Token NeuroCalls is not set")
 export const botAiKoshey = new Bot<AiKosheyContext>(token);
-export const botNeuroCoder = new Bot<Context>(neuroToken);
+export const botNeuroCoder = new Bot<Context>(neuroCoderToken);
+export const botNeuroCalls = new Bot<Context>(neuroCallsToken);
 
 if (!logBotToken) throw new Error("Token Log Bot is not set");
 export const logBot = new Bot(logBotToken);
@@ -156,6 +164,7 @@ export const handleUpdateAiKoshey = webhookCallback(botAiKoshey, "std/http");
 console.log(handleUpdateAiKoshey, "handleUpdateAiKoshey");
 
 export const handleUpdateNeuroCoder = webhookCallback(botNeuroCoder, "std/http");
+export const handleUpdateNeuroCalls = webhookCallback(botNeuroCalls, "std/http");
 
 export const handleUpdateJavaScript = webhookCallback(
   javaScriptDevBot,
