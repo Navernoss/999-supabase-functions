@@ -812,7 +812,10 @@ botNeuroCalls.on("message:text", async (ctx: Context) => {
 			const telegram_id = ctx.from?.id.toString()
 			if (!telegram_id) throw new Error("No telegram_id")
 			const voice_id_synclabs = await getVoiceId(telegram_id)
-			if (!voice_id_synclabs) throw new Error("No voice_id_synclabs")
+			if (!voice_id_synclabs) {
+				await ctx.reply(lang ? "🔮 Вы еще не присвоили голос аватару. Либо дождитесь пока вам придет ответ о том что ваш Voice ID успешно присвоен.	" : "🔮 You haven't assigned a voice to your avatar yet. Or wait for an answer about your Voice ID being successfully assigned.")
+				return
+			}
 			if (!query) throw new Error("No query")
 			const speech = await createSpeech(query, voice_id_synclabs)
 			console.log(speech, "speech")
