@@ -86,6 +86,7 @@ export const logBotToken = Deno.env.get("TELEGRAM_BOT_TOKEN_LOG");
 console.log(DEV, "DEV");
 const testBot = Deno.env.get("TEST_BOT");
 export const botUsername = DEV ? testBot : "ai_koshey_bot";
+export const botUsernameNeuroCalls = DEV ? testBot : "neurocalls_chat_bot"
 console.log(botUsername, "botUsername");
 
 const token = DEV ? tokenTest : tokenProd;

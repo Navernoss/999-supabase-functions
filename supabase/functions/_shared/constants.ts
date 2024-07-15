@@ -32,6 +32,10 @@ if (!Deno.env.get("SYNC_LABS_API_KEY")) {
   throw new Error("SYNC_LABS_API_KEY is not set");
 }
 
+if (!Deno.env.get("TELEGRAM_NEURO_CALLS_TOKEN")) {
+  throw new Error("TELEGRAM_NEURO_CALLS_TOKEN is not set");
+}
+
 export const DEV = Deno.env.get("DEV") === "true" ? true : false;
 
 export const HEYGEN_URL = Deno.env.get("HEYGEN_URL");
@@ -42,6 +46,9 @@ export const SYNC_LABS_API_KEY = Deno.env.get("SYNC_LABS_API_KEY");
 export const AI_KOSHEY = DEV
   ? Deno.env.get("TELEGRAM_BOT_TOKEN_AI_KOSHEY_TEST")
   : Deno.env.get("TELEGRAM_BOT_TOKEN_AI_KOSHEY");
+export const NEURO_CALLS = DEV
+  ? Deno.env.get("TELEGRAM_BOT_TOKEN_AI_KOSHEY_TEST")
+  : Deno.env.get("TELEGRAM_NEURO_CALLS_TOKEN");
 // local
 export const LOCAL_SUPABASE_URL = Deno.env.get("LOCAL_SUPABASE_URL");
 export const LOCAL_SUPABASE_URL_ANON_KEY = Deno.env.get(

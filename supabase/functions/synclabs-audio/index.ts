@@ -5,7 +5,7 @@
 import { corsHeaders, headers } from "../_shared/handleCORS.ts";
 import { getUserByVoiceId } from "../_shared/supabase/ai.ts";
 import { getVideoWithChatId, setVideoUrl } from "../_shared/supabase/videos.ts";
-import { botAiKoshey } from "../_shared/telegram/bots.ts";
+import { botNeuroCalls } from "../_shared/telegram/bots.ts";
 
 // Setup type definitions for built-in Supabase Runtime APIs
 /// <reference types="https://esm.sh/@supabase/functions-js/src/edge-runtime.d.ts" />
@@ -33,10 +33,10 @@ Deno.serve(async (req) => {
     // const chat_id = "1006101665"
     console.log(chat_id, "chat_id");
     try {
-      await botAiKoshey.api.sendVoice(chat_id, audioUrl);
+      await botNeuroCalls.api.sendVoice(chat_id, audioUrl);
     } catch (error) {
       console.error("Error sending video:", error);
-      await botAiKoshey.api.sendMessage(
+      await botNeuroCalls.api.sendMessage(
         chat_id,
         "Error sending video",
       );

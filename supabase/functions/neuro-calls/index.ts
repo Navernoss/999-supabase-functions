@@ -8,11 +8,11 @@ import {
 } from "https://deno.land/x/grammy@v1.8.3/mod.ts";
 
 import { checkSubscription } from "../check-subscription.ts";
-import { AI_KOSHEY, delay } from "../_shared/constants.ts";
+import { NEURO_CALLS, delay } from "../_shared/constants.ts";
 import { createUser } from "../_shared/nextapi/index.ts";
 import {
 	botNeuroCalls,
-	botUsername,
+	botUsernameNeuroCalls,
 	bugCatcherRequest,
 	handleUpdateNeuroCalls,
 } from "../_shared/telegram/bots.ts";
@@ -75,24 +75,7 @@ const isRu = async (ctx: Context) => {
 	return language === "ru";
 }
 
-const videoUrl = (isRu: boolean) => isRu ? "https://t.me/dao999nft_storage/5" : "https://t.me/dao999nft_storage/6";
-
-// Обработчик команды "avatar"
-botNeuroCalls.command("avatar", async (ctx) => {
-	if (!ctx.from) throw new Error("User not found");
-	await checkAndUpdate(ctx)
-	await ctx.replyWithChatAction("typing");
-	const lang = await isRu(ctx)
-	await ctx.reply(
-		`${lang ? "Пришли текст" : "Send text"}`,
-		{
-			reply_markup: {
-				force_reply: true,
-			},
-		},
-	);
-	return;
-});
+const videoUrl = (isRu: boolean) => isRu ? "https://t.me/dao999nft_storage/8" : "https://t.me/dao999nft_storage/9";
 
 const startIzbushka = async (ctx: Context) => {
 	const lang = await isRu(ctx)
@@ -133,8 +116,8 @@ const textError = async (ctx: Context) => {
 	const lang = await isRu(ctx)
 	return `🔒 ${
 		lang
-			? "Ох, увы и ах! Словечко, что до меня дошло, чарам тайным не отвечает. Прошу, дай знать иное, что ключом является верным, чтоб путь твой в царство дивное открыть сумели без замедления.\n\nЛибо вы можете попробовать пройти наш курс по нейросетям, использовав команду /neuro, и заработать наш токен $IGLA."
-			: "Oh, my apologies! The word that came to me, the secret does not answer. Please, tell me another word that is the key to the right path, so that the path of your life is a strange and open way to the kingdom.\n\nOr you can try to pass our course on the neural networks, using the command /neuro, and earn our token $IGLA."
+			? "Ох, увы и ах! Словечко, что до меня дошло, чарам тайным не отвечает. Прошу, дай знать иное, что ключом является верным, чтоб путь твой в царство дивное открыть сумели без замедления."
+			: "Oh, my apologies! The word that came to me, the secret does not answer. Please, tell me another word that is the key to the right path, so that the path of your life is a strange and open way to the kingdom."
 	}`;
 };
 
@@ -144,8 +127,8 @@ const welcomeMenu = async (ctx: Context) => {
 	if (!ctx.from) throw new Error("User not found");
 	const lang = await isRu(ctx)
 	const text = lang
-		? `🏰 Добро пожаловать в NeuroCalls, ${ctx.from?.first_name}!\n\nВыберите одну из доступных команд, чтобы начать:\n\n🚀 /start - Начать общение с NeuroCalls\n🌐 /language - Выбрать язык\n🆔 /soul - Наполнить аватара душой\n🤓 /face - Добавить лицо аватара\n📳 /mode - Выбрать режим общения с ИИ\n🧠 /model - Добавить модель аватара\n🔊 /text_to_speech - Преобразовать текст в речь\n🔊 /reset_voice - Сбросить голос аватара\n🎤 /voice - Добавить голос аватара\n🛒 /buy - Купить подписку\n🆔 /getchatid - Получить ID чата`
-		: `🏰 Welcome to NeuroCalls, ${ctx.from?.first_name}!\n\nChoose one of the available commands to get started:\n\n🚀 /start - Start chatting with NeuroCalls\n🌐 /language - Select language\n🆔 /soul - Fill your avatar's soul\n🤓 /face - Add avatar's face\n📳 /mode - Select AI communication mode\n🧠 /model - Add avatar's model\n🔊 /text_to_speech - Convert text to speech\n🔊 /reset_voice - Reset avatar's voice\n🎤 /voice - Add avatar's voice\n🛒 /buy - Buy subscription\n🆔 /getchatid - Get chat ID`;
+		? `🏰 Добро пожаловать в NeuroCalls, ${ctx.from?.first_name}!\n\nВыберите одну из доступных команд, чтобы начать:\n\n🚀 /start - Начать общение с NeuroCalls\n🌐 /language - Выбрать язык\n🆔 /soul - Наполнить аватара душой\n📳 /mode - Выбрать режим общения с ИИ\n🧠 /model - Добавить модель аватара\n🔊 /text_to_speech - Преобразовать текст в речь\n🔊 /reset_voice - Сбросить голос аватара\n🎤 /voice - Добавить голос аватара\n🛒 /buy - Купить подписку\n🆔 /getchatid - Получить ID чата`
+		: `🏰 Welcome to NeuroCalls, ${ctx.from?.first_name}!\n\nChoose one of the available commands to get started:\n\n🚀 /start - Start chatting with NeuroCalls\n🌐 /language - Select language\n🆔 /soul - Fill your avatar's soul\n📳 /mode - Select AI communication mode\n🧠 /model - Add avatar's model\n🔊 /text_to_speech - Convert text to speech\n🔊 /reset_voice - Reset avatar's voice\n🎤 /voice - Add avatar's voice\n🛒 /buy - Buy subscription\n🆔 /getchatid - Get chat ID`;
 
 	await ctx.replyWithVideo(videoUrl(lang), {
 		caption: text,
@@ -176,8 +159,8 @@ const welcomeMessage = async (ctx: Context) => {
 	if (!ctx.from) throw new Error("User not found");
 	const lang = await isRu(ctx)
 	const text = lang
-		? `🏰 Добро пожаловать в NeuroCalls, ${ctx.from?.first_name}!\n\nВыберите одну из доступных команд, чтобы начать:\n\n🚀 /start - Начать общение с NeuroCalls\n🌐 /language - Выбрать язык\n🆔 /soul - Наполнить аватара душой\n🤓 /face - Добавить лицо аватара\n📳 /mode - Выбрать режим общения с ИИ\n🧠 /model - Добавить модель аватара\n🔊 /text_to_speech - Преобразовать текст в речь\n🔊 /reset_voice - Сбросить голос аватара\n🎤 /voice - Добавить голос аватара\n🛒 /buy - Купить подписку\n🆔 /getchatid - Получить ID чата`
-		: `🏰 Welcome to NeuroCalls, ${ctx.from?.first_name}!\n\nChoose one of the available commands to get started:\n\n🚀 /start - Start chatting with NeuroCalls\n🌐 /language - Select language\n🆔 /soul - Fill your avatar's soul\n🤓 /face - Add avatar's face\n📳 /mode - Select AI communication mode\n🧠 /model - Add avatar's model\n🔊 /text_to_speech - Convert text to speech\n🔊 /reset_voice - Reset avatar's voice\n🎤 /voice - Add avatar's voice\n🛒 /buy - Buy subscription\n🆔 /getchatid - Get chat ID`;
+	? `🏰 Добро пожаловать в NeuroCalls, ${ctx.from?.first_name}!\n\nДля того чтобы начать пользоваться ботом, нужно назвать проходное слово.`
+	: `🏰 Welcome to NeuroCalls, ${ctx.from?.first_name}!\n\nTo start using the bot, you need to call the passphrase.`;
 
 	await ctx.replyWithVideo(videoUrl(lang), {
 		caption: text,
@@ -192,8 +175,8 @@ const intro = async (ctx: Context) => {
 	if (!ctx.from) throw new Error("User not found");
 	const lang = await isRu(ctx)
 	const intro = lang
-	? `🏰 Добро пожаловать в NeuroCalls, ${ctx.from?.first_name}!\n\nВыберите одну из доступных команд, чтобы начать:\n\n🚀 /start - Начать общение с NeuroCalls\n🌐 /language - Выбрать язык\n🆔 /soul - Наполнить аватара душой\n🤓 /face - Добавить лицо аватара\n📳 /mode - Выбрать режим общения с ИИ\n🧠 /model - Добавить модель аватара\n🔊 /text_to_speech - Преобразовать текст в речь\n🔊 /reset_voice - Сбросить голос аватара\n🎤 /voice - Добавить голос аватара\n🛒 /buy - Купить подписку\n🆔 /getchatid - Получить ID чата`
-	: `🏰 Welcome to NeuroCalls, ${ctx.from?.first_name}!\n\nChoose one of the available commands to get started:\n\n🚀 /start - Start chatting with NeuroCalls\n🌐 /language - Select language\n🆔 /soul - Fill your avatar's soul\n🤓 /face - Add avatar's face\n📳 /mode - Select AI communication mode\n🧠 /model - Add avatar's model\n🔊 /text_to_speech - Convert text to speech\n🔊 /reset_voice - Reset avatar's voice\n🎤 /voice - Add avatar's voice\n🛒 /buy - Buy subscription\n🆔 /getchatid - Get chat ID`;
+	? `🏰 Вы назвали правильное проходное слово. Добро пожаловать в NeuroCalls, ${ctx.from?.first_name}!\n\nДля того чтобы начать пользоваться ботом, нужно выбрать одну из доступных команд или воспользоваться кнопками ниже.`
+	: `🏰 You have named the correct passphrase. Welcome to NeuroCalls, ${ctx.from?.first_name}!\n\n To start using the bot, you need to select one of the available commands or use the buttons below.`
 
 	return intro;
 };
@@ -221,66 +204,63 @@ const menuButton = async (ctx: Context) => {
 	return menuButton;
 };
 
-botNeuroCalls.command("post", async (ctx) => {
-	await checkAndUpdate(ctx)
-	if (!ctx.from) throw new Error("User not found");
-	const lang = await isRu(ctx)
-	const chatId = "-1002228291515";
-	const message =
-		`<b>Ай Кощей 🤖 Персональный нейронный ассистент</b>\n\nРешение для управления встречами и задачами в <b>Telegram</b>,  использует возможности искусственного интеллекта и блокчейн-технологий <b>TON (The Open Network)</b> для создания эффективной и прозрачной системы взаимодействия пользователей. \n\nЭто функция <b>"Бортовой журнал"</b> — первый шаг в создании персонального цифрового аватара. \n\nНаше видение заключается в создании умного помощника, который не только записывает и анализирует встречи, но и активно помогает в управлении задачами, делегировании и планировании не выходя из телеграм.`;
-	const message_two =
-		`🌟 Добро пожаловать в мир наших удивительных ботов по обучению искусственному интеллекту, <b>JavaScript, TypeScript, React, Python и Tact! 🤖💡</b>\n\n🔍 Наши боты предлагают уникальную возможность заработать наш токен знаний $IGLA, погружаясь в мир новых технологий и углубляясь в востребованные навыки. 🚀\n\n💼 В отличие от других кликеров, наши боты позволяют пользователям проводить время с пользой, обучаясь навыкам, которые значительно повысят вашу профессиональную ценность на рынке труда.\n\n📚 Не упустите шанс улучшить свои знания и навыки, становясь более востребованным специалистом в сфере IT!\n\nПрисоединяйтесь к нам и начните свое преображение <b>прямо сейчас</b>!`;
-	const telegram_id = ctx.from?.id;
-	if (!telegram_id) throw new Error("No telegram id");
-	const chatMember = await botNeuroCalls.api.getChatMember(chatId, telegram_id);
-	const isAdmin = chatMember.status === "administrator" ||
-		chatMember.status === "creator";
-	if (!isAdmin) {
-		await ctx.reply(
-			lang
-				? "У вас нет прав администратора для выполнения этого действия."
-				: "You do not have admin rights to perform this action.",
-		);
-		return;
-	}
+// botNeuroCalls.command("post", async (ctx) => {
+// 	await checkAndUpdate(ctx)
+// 	if (!ctx.from) throw new Error("User not found");
+// 	const lang = await isRu(ctx)
+// 	const chatId = "-1002228291515";
+// 	const message =
+// 		`<b>Ай Кощей 🤖 Персональный нейронный ассистент</b>\n\nРешение для управления встречами и задачами в <b>Telegram</b>,  использует возможности искусственного интеллекта и блокчейн-технологий <b>TON (The Open Network)</b> для создания эффективной и прозрачной системы взаимодействия пользователей. \n\nЭто функция <b>"Бортовой журнал"</b> — первый шаг в создании персонального цифрового аватара. \n\nНаше видение заключается в создании умного помощника, который не только записывает и анализирует встречи, но и активно помогает в управлении задачами, делегировании и планировании не выходя из телеграм.`;
+// 	const message_two =
+// 		`🌟 Добро пожаловать в мир наших удивительных ботов по обучению искусственному интеллекту, <b>JavaScript, TypeScript, React, Python и Tact! 🤖💡</b>\n\n🔍 Наши боты предлагают уникальную возможность заработать наш токен знаний $IGLA, погружаясь в мир новых технологий и углубляясь в востребованные навыки. 🚀\n\n💼 В отличие от других кликеров, наши боты позволяют пользователям проводить время с пользой, обучаясь навыкам, которые значительно повысят вашу профессиональную ценность на рынке труда.\n\n📚 Не упустите шанс улучшить свои знания и навыки, становясь более востребованным специалистом в сфере IT!\n\nПрисоединяйтесь к нам и начните свое преображение <b>прямо сейчас</b>!`;
+// 	const telegram_id = ctx.from?.id;
+// 	if (!telegram_id) throw new Error("No telegram id");
+// 	const chatMember = await botNeuroCalls.api.getChatMember(chatId, telegram_id);
+// 	const isAdmin = chatMember.status === "administrator" ||
+// 		chatMember.status === "creator";
+// 	if (!isAdmin) {
+// 		await ctx.reply(
+// 			lang
+// 				? "У вас нет прав администратора для выполнения этого действия."
+// 				: "You do not have admin rights to perform this action.",
+// 		);
+// 		return;
+// 	}
 
-	try {
-		await botNeuroCalls.api.sendVideo(chatId, videoUrl(lang), {
-			caption: message,
-			parse_mode: "HTML",
-		});
-		await botNeuroCalls.api.sendMessage(chatId, message_two, {
-			parse_mode: "HTML",
+// 	try {
+// 		await botNeuroCalls.api.sendVideo(chatId, videoUrl(lang), {
+// 			caption: message,
+// 			parse_mode: "HTML",
+// 		});
+// 		await ctx.reply(
+// 			lang
+// 				? "Сообщение с видео отправлено в канал."
+// 				: "Message with video sent to the channel.",
+// 		);
+// 	} catch (error) {
+// 		console.error("Failed to send message with video to the channel:", error);
+// 		await ctx.reply(
+// 			lang
+// 				? "Не удалось отправить сообщение с видео в канал."
+// 				: "Failed to send message with video to the channel.",
+// 		);
+// 	}
+// });
+
+botNeuroCalls.command("avatar", async (ctx) => {
+	if (!ctx.from) throw new Error("User not found");
+	await checkAndUpdate(ctx)
+	await ctx.replyWithChatAction("typing");
+	const lang = await isRu(ctx)
+	await ctx.reply(
+		`${lang ? "Пришли текст" : "Send text"}`,
+		{
 			reply_markup: {
-				inline_keyboard: [[
-					// { text: "Automatization", url: "https://t.me/bot1" },
-					{ text: "TypeScript", url: "https://t.me/typescript_dev_bot" },
-					{ text: "Python", url: "https://t.me/python_ai_dev_bot" },
-				], [{ text: "React", url: "https://t.me/react_native_dev_bot" }, {
-					text: "JavaScript",
-					url: "https://t.me/javascriptcamp_bot",
-				} // { text: "Tact", url: "https://t.me/bot6" },
-				], [
-					{
-						text: "Ai Koshey",
-						url: "https://t.me/ai_koshey_bot",
-					},
-				]],
+				force_reply: true,
 			},
-		});
-		await ctx.reply(
-			lang
-				? "Сообщение с видео отправлено в канал."
-				: "Message with video sent to the channel.",
-		);
-	} catch (error) {
-		console.error("Failed to send message with video to the channel:", error);
-		await ctx.reply(
-			lang
-				? "Не удалось отправить сообщение с видео в канал."
-				: "Failed to send message with video to the channel.",
-		);
-	}
+		},
+	);
+	return;
 });
 
 botNeuroCalls.command("getchatid", async (ctx) => {
@@ -477,7 +457,7 @@ botNeuroCalls.command("start", async (ctx) => {
 					}\n${JSON.stringify(error)}`;
 					await ctx.reply(textError);
 					await bugCatcherRequest(
-						"ai_koshey_bot (select_izbushka && inviter)",
+						"neuro_calls_bot (select_izbushka && inviter)",
 						JSON.stringify(error),
 					);
 					return;
@@ -528,7 +508,7 @@ botNeuroCalls.command("start", async (ctx) => {
 					}\n${error}`,
 				);
 				await bugCatcherRequest(
-					"ai_koshey_bot (select_izbushka && inviter)",
+					"neuro_calls_bot (select_izbushka && inviter)",
 					JSON.stringify(error),
 				);
 				throw new Error("Error: checkAndReturnUser.");
@@ -546,7 +526,7 @@ botNeuroCalls.command("buy", async (ctx) => {
 <b>🏢 НейроБаза - Групповая сессия для начинающих - 4754 ⭐️ в месяц</b>
 Все в Start + функции искусственного интеллекта, 3-часовой видеозал, 18-часовая запись.
 	
-<b>💼 НейроОфис - Групповая сессия для продвинутых - в месяц</b>
+<b>💼 НейроОфис - Групповая сессия для продвинутых - цена договорная</b>
 Нейро-офис для вашей компании с надежным и дружелюбным магистром, обученным работе с вашими данными.`
 	 : `<b>🚀 NeuroStart - 432 ⭐️ per month</b>
 Chat with memories + GPT 1 video room, 3 hours rec, AI guru assistant.
@@ -667,7 +647,7 @@ botNeuroCalls.command("reset_voice", async (ctx) => {
 				: "🤔 Error resetting digital avatar voice.",
 		);
 		await bugCatcherRequest(
-			"ai_koshey_bot (reset_voice)",
+			"neuro_calls_bot (reset_voice)",
 			JSON.stringify(error),
 		);
 		throw new Error("Error resetting digital avatar voice.");
@@ -677,11 +657,11 @@ botNeuroCalls.command("reset_voice", async (ctx) => {
 botNeuroCalls.command("voice", async (ctx) => {
 	await checkAndUpdate(ctx)
 	console.log("voice");
-	// await ctx.replyWithChatAction("typing");
+	await ctx.replyWithChatAction("typing");
 	if (!ctx.from) throw new Error("User not found");
 	const lang = await isRu(ctx)
 	const text = lang
-	  ? "🔮 О, добрый молодец! Пошли мне свой голос, и я, волшебным образом, буду говорить с тобой твоим собственным голосом, словно из сказки."
+	  ? "🔮 Отправьте боту голосовое сообщение, чтобы создать цифрового аватара, который будет говорить вашим голосом."
 	  : "🔮 Please send me a voice message, and I will use it to create a voice avatar that speaks in your own voice.";
 
 	await ctx.reply(text, {
@@ -689,7 +669,7 @@ botNeuroCalls.command("voice", async (ctx) => {
 			force_reply: true
 		}
 	});
-	// await ctx.reply(lang ? "Чтобы использовать данную функцию, необходимо приобрести уровень water 🌊" : "To use this function, you need to purchase the water level 🌊")
+	// await ctx.reply(lang ? "Чтобы использовать данную функцию, необходимо приобрести уровень НейроБаза 🏢" : "To use this function, you need to purchase the NeuroBasic level 🏢")
 	return
 });
 
@@ -699,7 +679,7 @@ botNeuroCalls.command("face", async (ctx) => {
 	await ctx.replyWithChatAction("typing");
 	if (!ctx.from) throw new Error("User not found");
 	const lang = await isRu(ctx)
-	await ctx.reply(lang ? "Чтобы использовать данную функцию, необходимо приобрести уровень water 🌊" : "To use this function, you need to purchase the water level 🌊")
+	await ctx.reply(lang ? "Чтобы использовать данную функцию, необходимо приобрести уровень НейроБаза 🏢" : "To use this function, you need to purchase the NeuroBasic level 🏢")
 	return
 })
 
@@ -709,7 +689,7 @@ botNeuroCalls.command("model", async (ctx) => {
 	await ctx.replyWithChatAction("typing");
 	if (!ctx.from) throw new Error("User not found");
 	const lang = await isRu(ctx)
-	// await ctx.reply(lang ? "Чтобы использовать данную функцию, необходимо приобрести уровень water 🌊" : "To use this function, you need to purchase the water level 🌊")
+	// await ctx.reply(lang ? "Чтобы использовать данную функцию, необходимо приобрести уровень НейроБаза 🏢" : "To use this function, you need to purchase the NeuroBasic level 🏢")
 	await ctx.reply(lang ? "🧠 Выберите модель ИИ" : "🧠Select Model Ai", {
 		reply_markup: {
 			inline_keyboard: [
@@ -771,7 +751,7 @@ botNeuroCalls.on("message:voice", async (ctx) => {
 	// Получаем файл голосового сообщения
 	const file = await ctx.api.getFile(fileId);
 	const filePath = file.file_path;
-	const fileUrl = `https://api.telegram.org/file/bot${AI_KOSHEY}/${filePath}`;
+	const fileUrl = `https://api.telegram.org/file/bot${NEURO_CALLS}/${filePath}`;
 
 	console.log(fileUrl, "fileUrl");
 	// Отправляем файл в ElevenLabs для создания нового голоса
@@ -1117,13 +1097,12 @@ botNeuroCalls.on("callback_query:data", async (ctx) => {
 
 	await ctx.replyWithChatAction("typing");
 	console.log(ctx);
-	const isHaveAnswer = callbackData.split("_").length === 4;
 
 	if (callbackData.startsWith("buy")) {
 		if (callbackData.endsWith("neurostart")) {
 			await ctx.replyWithInvoice(
 				lang ? "🚀 НейроСтарт" : "🚀 NeuroStart",
-				lang ? "Вы получите подписку уровня '🚀 НейроСтарт'" : "You will receive a subscription to the '🚀 NeuroStart' level",
+				lang ? "Чат с воспоминаниями, задачами, транскрибацией диалогов + 1 видеозал GPT, 3 часа записи, ассистент гуру искусственного интеллекта." : "Chat with memories + GPT 1 video room, 3 hours rec, AI guru assistant.",
 				"neurostart",
 				"", // Оставьте пустым для цифровых товаров
 				"XTR", // Используйте валюту Telegram Stars
@@ -1133,8 +1112,8 @@ botNeuroCalls.on("callback_query:data", async (ctx) => {
 		}
 		if (callbackData.endsWith("neurobasic")) {
 			await ctx.replyWithInvoice(
-				lang ? "НейроБаза" : "NeuroBasic",
-				lang ? "Вы получите подписку уровня 'НейроБаза'" : "You will receive a subscription to the 'NeuroBasic' level",
+				lang ? "🏢 НейроБаза" : "🏢 NeuroBasic",
+				lang ? "Все в Start + функции искусственного интеллекта, 3-часовой видеозал, 18-часовая запись." : "Everything in Start + AI functions, 3 hour video room, 18 hour rec.",
 				"neurobasic",
 				"", // Оставьте пустым для цифровых товаров
 				"XTR", // Используйте валюту Telegram Stars
@@ -1230,39 +1209,39 @@ botNeuroCalls.on("callback_query:data", async (ctx) => {
 
 				await ctx.replyWithChatAction("typing");
 				if (type === "neurostart") {
-					const textFire = `${
+					const textStart = `🚀 ${
 						lang
-							? "Пламя горячее - это личные избушки, где твои слова пишутся и задачи создаются."
-							: "Fire is a private room where your words are written and tasks are created."
+							? "НейроСтарт - это личные избушки, где твои слова пишутся и задачи создаются."
+							: "NeuroStart - private rooms where your words are written and tasks are created."
 					}`;
 					await ctx.reply(
-						textFire,
+						textStart,
 						{
 							reply_markup: { inline_keyboard: keyboard },
 						},
 					);
 					return;
 				} else if (type === "neurobasic") {
-					const textWater = `💧 ${
+					const textBasic = `🏢 ${
 						lang
-							? "Воды чистые к себе манят, где гость ты в избушках дорогой."
-							: "Water is pure to you, where guests are in the private rooms."
+							? "НейроБаза - это избушки, в которые вас пригласил другой пользователь."
+							: "NeuroBasic - rooms where you were invited by another user."
 					}`;
 					await ctx.reply(
-						textWater,
+						textBasic,
 						{
 							reply_markup: { inline_keyboard: keyboard },
 						},
 					);
 					return;
 				} else if (type === "neurooffice") {
-					const textCopperPipes = `🎺 ${
+					const textOffice = `💼 ${
 						lang
-							? "Медные трубы - это чародейские избушки, где обучение к мудрости тебя ведет."
-							: "Copper pipes are the sacred huts where the training to wisdom guides you."
+							? "НейроОфис - это чародейские избушки, где обучение к мудрости тебя ведет."
+							: "NeuroOffice - sacred huts where the training to wisdom guides you."
 					}`;
 					await ctx.reply(
-						textCopperPipes,
+						textOffice,
 						{
 							reply_markup: { inline_keyboard: keyboard },
 						},
@@ -1312,8 +1291,8 @@ botNeuroCalls.on("callback_query:data", async (ctx) => {
 			return;
 		} catch (error) {
 			console.error(error);
-			await bugCatcherRequest("ai_koshey_bot (name_izbushka)", error);
-			throw new Error("ai_koshey_bot (name_izbushka)");
+			await bugCatcherRequest("neuro_calls_bot (name_izbushka)", error);
+			throw new Error("neuro_calls_bot (name_izbushka)");
 		}
 	}
 
@@ -1351,14 +1330,14 @@ botNeuroCalls.on("callback_query:data", async (ctx) => {
 					lang ? "Ошибка: не удалось загрузить избушки." : "Error: failed to load room."
 				}`;
 				await ctx.reply(textError);
-				await bugCatcherRequest("ai_koshey_bot (show_izbushka)", ctx);
-				throw new Error("ai_koshey_bot (show_izbushka)");
+				await bugCatcherRequest("neuro_calls_bot (show_izbushka)", ctx);
+				throw new Error("neuro_calls_bot (show_izbushka)");
 			}
 			return;
 		} catch (error) {
 			console.error("error show_izbushka", error);
-			await bugCatcherRequest("ai_koshey_bot (show_izbushka)", ctx);
-			throw new Error("ai_koshey_bot (show_izbushka)");
+			await bugCatcherRequest("neuro_calls_bot (show_izbushka)", ctx);
+			throw new Error("neuro_calls_bot (show_izbushka)");
 		}
 	}
 
@@ -1371,8 +1350,8 @@ botNeuroCalls.on("callback_query:data", async (ctx) => {
 			}
 			const textForInvite = `${
 				lang
-					? '📺 Что ж, путник дорогой, дабы трансляцию начать, нажми кнопку "Izbushka" смелее и веселись, ибо все приготовлено к началу твоего путешествия по цифровым просторам!\n\n🌟 Поделись следующей ссылкой с тем, с кем встретиться в Избушке на курьих ножках хочешь.'
-					: 'What, traveler, to start the broadcast, press the "Izbushka" button more joyfully and laugh, because all is prepared for the start of your journey through the digital spaces! \n\n🌟 Share the following link with the person you want to meet in the hut on the curved tips of the hut.'
+					? '📺 Что ж, путник дорогой, дабы трансляцию начать, нажми кнопку "Izbushka" смелее и веселись, ибо все приготовлено к началу твоего путешествия по цифровым просторам!\n\n🌟 Поделись следующей ссылкой с тем, с кем встретиться в Избушке хочешь.'
+					: 'What, traveler, to start the broadcast, press the "Izbushka" button more joyfully and laugh, because all is prepared for the start of your journey through the digital spaces! \n\n🌟 Share the following link with the person you want to meet in the hut.'
 			}`;
 			await ctx.reply(
 				textForInvite,
@@ -1381,16 +1360,16 @@ botNeuroCalls.on("callback_query:data", async (ctx) => {
 
 			const textInvite = `${
 				lang
-					? `🏰 **Приглашение в Тридевятое Царство** 🏰\n[Нажми на ссылку чтобы присоединиться!](https://t.me/${botUsername}?start=${select_izbushka}_${telegram_id})\n\nПосле подключения к боту нажми на кнопку **Izbushka**, чтобы войти на видео встречу.\n[Инструкция подключения](https://youtube.com/shorts/YKG-1fdEtAs?si=ojKvK2DfPsZ0mbd5)`
-					: `Invitation to the DAO 999 NFT\n[Press the link to join!](https://t.me/${botUsername}?start=${select_izbushka}_${telegram_id})\n\nAfter connecting to the bot, press the **Izbushka** button to enter the video meeting.\n[Instruction for connecting](https://youtube.com/shorts/YKG-1fdEtAs?si=ojKvK2DfPsZ0mbd5)`
+					? `🏰 **Приглашение в НейроЗвонки** 🏰\n[Нажми на ссылку чтобы присоединиться!](https://t.me/${botUsernameNeuroCalls}?start=${select_izbushka}_${telegram_id})\n\nПосле подключения к боту нажми на кнопку **Izbushka**, чтобы войти на видео встречу.\n[Инструкция подключения](https://youtube.com/shorts/YKG-1fdEtAs?si=ojKvK2DfPsZ0mbd5)`
+					: `Invitation to the NeuroCalls\n[Press the link to join!](https://t.me/${botUsernameNeuroCalls}?start=${select_izbushka}_${telegram_id})\n\nAfter connecting to the bot, press the **Izbushka** button to enter the video meeting.\n[Instruction for connecting](https://youtube.com/shorts/YKG-1fdEtAs?si=ojKvK2DfPsZ0mbd5)`
 			}`;
 
 			await ctx.reply(textInvite, { parse_mode: "Markdown" });
 
 			return;
 		} catch (error) {
-			await bugCatcherRequest("ai_koshey_bot (select_izbushka)", error);
-			throw new Error("ai_koshey_bot (select_izbushka)");
+			await bugCatcherRequest("neuro_calls_bot (select_izbushka)", error);
+			throw new Error("neuro_calls_bot (select_izbushka)");
 		}
 	}
 return
@@ -1413,10 +1392,10 @@ await botNeuroCalls.api.setMyCommands([
 		command: "/soul",
 		description: "🆔 Fill your avatar's soul",
 	},
-	{
-		command: "/face",
-		description: "🤓 Add avatar's face",
-	},
+	// {
+	// 	command: "/face",
+	// 	description: "🤓 Add avatar's face",
+	// },
 	{
 		command: "/mode",
 		description: "📳 Select AI communication mode",
@@ -1481,8 +1460,8 @@ Deno.serve(async (req) => {
 
 // const textInvite = `${
 //   isRu
-//     ? `🏰 **Приглашение в Тридевятое Царство** 🏰\n\n[Нажми на ссылку чтобы присоединиться!](https://t.me/${botUsername}?start=${select_izbushka}_${username})\n\nПосле подключения к боту нажми на кнопку **Izbushka**, чтобы войти на видео встречу.`
-//     : `Invitation to the **DAO 999 NFT**\n\nPress the link to join!](https://t.me/${botUsername}?start=${select_izbushka}_${username})\n\nAfter connecting to the bot, press the **Izbushka** button to enter the video meeting.`
+//     ? `🏰 **Приглашение в Тридевятое Царство** 🏰\n\n[Нажми на ссылку чтобы присоединиться!](https://t.me/${botUsernameNeuroCalls}?start=${select_izbushka}_${username})\n\nПосле подключения к боту нажми на кнопку **Izbushka**, чтобы войти на видео встречу.`
+//     : `Invitation to the **DAO 999 NFT**\n\nPress the link to join!](https://t.me/${botUsernameNeuroCalls}?start=${select_izbushka}_${username})\n\nAfter connecting to the bot, press the **Izbushka** button to enter the video meeting.`
 // }`;
 // const buttons = [
 //   {
