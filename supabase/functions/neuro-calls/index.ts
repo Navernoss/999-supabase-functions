@@ -75,7 +75,8 @@ const isRu = async (ctx: Context) => {
 	return language === "ru";
 }
 
-const videoUrl = (isRu: boolean) => isRu ? "https://t.me/dao999nft_storage/8" : "https://t.me/dao999nft_storage/9";
+const videoUrl = (isRu: boolean) => isRu ? "https://t.me/dao999nft_storage/8" : "https://t.me/dao999nft_storage/10";
+const chatIdSubscription = (lang: boolean) => lang ? "-1002228291515" : "-1002213213628"
 
 const startIzbushka = async (ctx: Context) => {
 	const lang = await isRu(ctx)
@@ -87,7 +88,7 @@ const startIzbushka = async (ctx: Context) => {
 
 		const buttons = [
 			{
-				text: `${lang ? "Войти в Избушку" : "Enter the room"}`,
+				text: `${lang ? "Войти в комнату" : "Enter the room"}`,
 				web_app: { url: "https://dao999nft.com/show-izbushka" },
 			},
 		];
@@ -116,8 +117,8 @@ const textError = async (ctx: Context) => {
 	const lang = await isRu(ctx)
 	return `🔒 ${
 		lang
-			? "Ох, увы и ах! Словечко, что до меня дошло, чарам тайным не отвечает. Прошу, дай знать иное, что ключом является верным, чтоб путь твой в царство дивное открыть сумели без замедления."
-			: "Oh, my apologies! The word that came to me, the secret does not answer. Please, tell me another word that is the key to the right path, so that the path of your life is a strange and open way to the kingdom."
+			? "Ох, увы и ах! Проходное слово, которое вы назвали, некорректно."
+			: "Oh, my apologies! The passphrase you called was incorrect."
 	}`;
 };
 
@@ -136,15 +137,15 @@ const welcomeMenu = async (ctx: Context) => {
 			inline_keyboard: [
 				[
 					{
-						text: `${lang ? "🚀 НейроСтарт" : "🚀 NeuroStart"}`,
+						text: `${lang ? "🚀 Мои комнаты" : "🚀 My rooms"}`,
 						callback_data: "neurostart",
 					},
 					{
-						text: `${lang ? "🏢 НейроБаза" : "🏢 NeuroBasic"}`,
+						text: `${lang ? "🏢 В гостях" : "🏢 On a visit"}`,
 						callback_data: "neurobasic",
 					},
 					{
-						text: `${lang ? "💼 НейроОфис" : "💼 NeuroOffice"}`,
+						text: `${lang ? "💼 Обучение" : "💼 Learning"}`,
 						callback_data: "neurooffice",
 					},
 				],
@@ -304,24 +305,6 @@ botNeuroCalls.command("start", async (ctx) => {
 	const language_code = message?.from?.language_code;
 	if (!ctx.from) throw new Error("User not found");
 	console.log(await isRu(ctx), "isRu")
-
-	const chatIdSubscription = lang ? "-1002228291515" : "-1002015840738"
-	const isSubscription = true
-  // await checkSubscription(
-	// 	ctx,
-	// 	ctx.from?.id,
-	// 	chatIdSubscription
-	// );
-	if (!isSubscription) {
-		await ctx.reply(lang ? "Вы не подписаны на канал. Чтобы продолжить тест, нужно подписаться 👁‍🗨" : "You are not subscribed to the channel. To continue the test, you need to subscribe to the channel 👁‍🗨",
-			{
-				reply_markup: { inline_keyboard: [
-					[{ text: lang ? "👁‍🗨 Подписаться" : "👁‍🗨 Subscribe", url: lang ? "https://t.me/ai_koshey999nft" : "https://t.me/ai_koshey_en" }],
-				] }
-				}
-			);
-			return;
-		}
 
 	if(!ctx.from.username) {
 		await ctx.reply(lang ? "🔍 Для использования бота, необходимо иметь username" : "🔍 To use the bot, you must have a username")
@@ -486,6 +469,21 @@ botNeuroCalls.command("start", async (ctx) => {
 			}
 		}
 	} else {
+const isSubscription = await checkSubscription(
+		ctx,
+		ctx.from?.id,
+		chatIdSubscription(lang)
+	);
+	if (!isSubscription) {
+		await ctx.reply(lang ? "Вы не подписаны на канал. Чтобы продолжить, нужно подписаться 👁‍🗨" : "You are not subscribed to the channel. To continue, you need to subscribe to the channel 👁‍🗨",
+			{
+				reply_markup: { inline_keyboard: [
+					[{ text: lang ? "👁‍🗨 Подписаться" : "👁‍🗨 Subscribe", url: lang ? "https://t.me/neurocalls_blog" : "https://t.me/neurocalls_en_blog" }],
+				] }
+				}
+			);
+			return;
+		}
 		if (username && telegram_id) {
 			try {
 				const { isUserExist, user } = await checkAndReturnUser(
@@ -560,7 +558,7 @@ botNeuroCalls.on("message:successful_payment", async (ctx) => {
 	await sendPaymentInfo(user_id, level)
 	const levelForMessage = level === "neurostart" ? lang ? "🚀 НейроСтарт" : "🚀 NeuroStart" : level === "neurobasic" ? lang ? "🏢 НейроБаза" : "🏢 NeuroBasic" : lang ? "💼 НейроОфис" : "💼 NeuroOffice"
 	await ctx.reply(lang ? "🤝 Спасибо за покупку!" : "🤝 Thank you for the purchase!");
-	const textToPost = lang ? `🪙 В казну тридевятого царства прибыло\n\n @${ctx.from.username} спасибо за покупку уровня ${levelForMessage}, добрый человек!` : `🪙 @${ctx.from.username} thank you for the purchase level ${levelForMessage}!`
+	const textToPost = lang ? `🪙 @${ctx.from.username} спасибо за покупку уровня ${levelForMessage}!` : `🪙 @${ctx.from.username} thank you for the purchase level ${levelForMessage}!`
 	await ctx.api.sendMessage("-1001476314188", textToPost)
 	await ctx.api.sendMessage("-1001729610573", textToPost)
 	return;
@@ -634,8 +632,8 @@ botNeuroCalls.command("reset_voice", async (ctx) => {
 	if (!telegram_id) throw new Error("No telegram_id");
 
 	const text = lang
-		? "🔮 О, добрый молодец! Голос твоего цифрового аватара был успешно сброшен, и теперь ты можешь создать новый."
-		: "🔮 Oh, noble traveler! The voice of your digital avatar has been successfully reset, and now you can create a new one.";
+		? "🔮 Голос твоего цифрового аватара был успешно сброшен, и теперь ты можешь создать новый."
+		: "🔮 The voice of your digital avatar has been successfully reset, and now you can create a new one.";
 	try {
 		// Сбрасываем голос цифрового аватара
 		await updateUser(telegram_id, { voice_id_synclabs: null });
@@ -761,7 +759,7 @@ botNeuroCalls.on("message:voice", async (ctx) => {
 
 	if (ctx.message.reply_to_message) {
 		const originalMessageText = ctx.message.reply_to_message?.text
-		if (originalMessageText?.includes("🔮 О, добрый молодец! Пошли мне свой голос, и я, волшебным образом, буду говорить с тобой твоим собственным голосом, словно из сказки."
+		if (originalMessageText?.includes("🔮 Отправьте боту голосовое сообщение, чтобы создать цифрового аватара, который будет говорить вашим голосом."
 		|| "🔮 Please send me a voice message, and I will use it to create a voice avatar that speaks in your own voice.")) {
 	const voiceId = await createVoiceSyncLabs({
 		fileUrl,
@@ -1214,8 +1212,8 @@ botNeuroCalls.on("callback_query:data", async (ctx) => {
 				if (type === "neurostart") {
 					const textStart = `🚀 ${
 						lang
-							? "НейроСтарт - это личные избушки, где твои слова пишутся и задачи создаются."
-							: "NeuroStart - private rooms where your words are written and tasks are created."
+							? "Мои комнаты - это личные комнаты, где твои слова пишутся и задачи создаются."
+							: "My rooms - private rooms where your words are written and tasks are created."
 					}`;
 					await ctx.reply(
 						textStart,
@@ -1227,8 +1225,8 @@ botNeuroCalls.on("callback_query:data", async (ctx) => {
 				} else if (type === "neurobasic") {
 					const textBasic = `🏢 ${
 						lang
-							? "НейроБаза - это избушки, в которые вас пригласил другой пользователь."
-							: "NeuroBasic - rooms where you were invited by another user."
+							? "В гостях - это комнаты, в которые вас пригласил другой пользователь."
+							: "In the guest - rooms where you were invited by another user."
 					}`;
 					await ctx.reply(
 						textBasic,
@@ -1240,8 +1238,8 @@ botNeuroCalls.on("callback_query:data", async (ctx) => {
 				} else if (type === "neurooffice") {
 					const textOffice = `💼 ${
 						lang
-							? "НейроОфис - это чародейские избушки, где обучение к мудрости тебя ведет."
-							: "NeuroOffice - sacred huts where the training to wisdom guides you."
+							? "Обучение - это комнаты, где обучение к мудрости тебя ведет."
+							: "Learning - rooms where the training to wisdom guides you."
 					}`;
 					await ctx.reply(
 						textOffice,
@@ -1255,7 +1253,7 @@ botNeuroCalls.on("callback_query:data", async (ctx) => {
 			} else {
 				const textError = `${
 					lang
-						? "У вас нет избушек куда вас пригласили"
+						? "У вас нет комнат куда вас пригласили"
 						: "You don't have any rooms where you were invited"
 				}`;
 				await ctx.reply(textError);
@@ -1263,7 +1261,7 @@ botNeuroCalls.on("callback_query:data", async (ctx) => {
 			}
 		} catch (error) {
 			const textError = `${
-				lang ? "Ошибка при выборе избушки" : "Error selecting the room"
+				lang ? "Ошибка при выборе комнаты" : "Error selecting the room"
 			}`;
 			await ctx.reply(textError, error);
 			throw new Error(textError);
@@ -1284,7 +1282,7 @@ botNeuroCalls.on("callback_query:data", async (ctx) => {
 	if (callbackData === "name_izbushka") {
 		try {
 			const textQuestion = `${
-				lang ? "Как назовем избушку?" : "How do we name the room?"
+				lang ? "Как назовем комнату?" : "How do we name the room?"
 			}`;
 			await ctx.reply(textQuestion, {
 				reply_markup: {
@@ -1304,7 +1302,7 @@ botNeuroCalls.on("callback_query:data", async (ctx) => {
 		// console.log(rooms, "rooms");
 		try {
 			if (Array.isArray(rooms)) {
-				const textSelectRoom = `${lang ? "🏡 Выберите избушку" : "Select the room"}`;
+				const textSelectRoom = `${lang ? "🏡 Выберите комнату" : "Select the room"}`;
 				await ctx.reply(textSelectRoom, {
 					reply_markup: {
 						inline_keyboard: rooms
@@ -1330,7 +1328,7 @@ botNeuroCalls.on("callback_query:data", async (ctx) => {
 				});
 			} else {
 				const textError = `${
-					lang ? "Ошибка: не удалось загрузить избушки." : "Error: failed to load room."
+					lang ? "Ошибка: не удалось загрузить комнату." : "Error: failed to load room."
 				}`;
 				await ctx.reply(textError);
 				await bugCatcherRequest("neuro_calls_bot (show_izbushka)", ctx);
@@ -1353,8 +1351,8 @@ botNeuroCalls.on("callback_query:data", async (ctx) => {
 			}
 			const textForInvite = `${
 				lang
-					? '📺 Что ж, путник дорогой, дабы трансляцию начать, нажми кнопку "Izbushka" смелее и веселись, ибо все приготовлено к началу твоего путешествия по цифровым просторам!\n\n🌟 Поделись следующей ссылкой с тем, с кем встретиться в Избушке хочешь.'
-					: 'What, traveler, to start the broadcast, press the "Izbushka" button more joyfully and laugh, because all is prepared for the start of your journey through the digital spaces! \n\n🌟 Share the following link with the person you want to meet in the hut.'
+					? '📺 Что ж, путник дорогой, дабы трансляцию начать, нажми кнопку "Spaces" смелее и веселись, ибо все приготовлено к началу твоего путешествия по цифровым просторам!\n\n🌟 Поделись ссылкой, чтобы встретиться в комнате.'
+					: 'What, traveler, to start the broadcast, press the "Spaces" button more joyfully and laugh, because all is prepared for the start of your journey through the digital spaces! \n\n🌟 Share the following link with the person you want to meet in the room.'
 			}`;
 			await ctx.reply(
 				textForInvite,
@@ -1363,8 +1361,8 @@ botNeuroCalls.on("callback_query:data", async (ctx) => {
 
 			const textInvite = `${
 				lang
-					? `🏰 **Приглашение в НейроЗвонки** 🏰\n[Нажми на ссылку чтобы присоединиться!](https://t.me/${botUsernameNeuroCalls}?start=${select_izbushka}_${telegram_id})\n\nПосле подключения к боту нажми на кнопку **Izbushka**, чтобы войти на видео встречу.\n[Инструкция подключения](https://youtube.com/shorts/YKG-1fdEtAs?si=ojKvK2DfPsZ0mbd5)`
-					: `Invitation to the NeuroCalls\n[Press the link to join!](https://t.me/${botUsernameNeuroCalls}?start=${select_izbushka}_${telegram_id})\n\nAfter connecting to the bot, press the **Izbushka** button to enter the video meeting.\n[Instruction for connecting](https://youtube.com/shorts/YKG-1fdEtAs?si=ojKvK2DfPsZ0mbd5)`
+					? `🏰 **Приглашение в НейроЗвонки** 🏰\n[Нажми на ссылку чтобы присоединиться!](https://t.me/${botUsernameNeuroCalls}?start=${select_izbushka}_${telegram_id})\n\nПосле подключения к боту нажми на кнопку **Spaces**, чтобы войти на видео встречу.\n[Инструкция подключения](https://youtube.com/shorts/YKG-1fdEtAs?si=ojKvK2DfPsZ0mbd5)`
+					: `Invitation to the NeuroCalls\n[Press the link to join!](https://t.me/${botUsernameNeuroCalls}?start=${select_izbushka}_${telegram_id})\n\nAfter connecting to the bot, press the **Spaces** button to enter the video meeting.\n[Instruction for connecting](https://youtube.com/shorts/YKG-1fdEtAs?si=ojKvK2DfPsZ0mbd5)`
 			}`;
 
 			await ctx.reply(textInvite, { parse_mode: "Markdown" });

@@ -9,7 +9,7 @@ import { createChatCompletionJson } from "../_shared/openai/createChatCompletion
 import { createEmoji } from "../_shared/openai/createEmoji.ts";
 
 import { SITE_URL } from "../_shared/constants.ts";
-import { bugCatcherRequest, supportRequest } from "../_shared/telegram/bots.ts";
+import { botNeuroCalls, bugCatcherRequest, supportRequest } from "../_shared/telegram/bots.ts";
 import {
   createPassport,
   getPassportByRoomId,
@@ -56,14 +56,12 @@ async function sendTasksToTelegram({
       ? `${first_name} ${last_name || ""} (@${username})`
       : "";
 
-    const bot = new Bot(token);
-
     await Promise.all(passports.map(async (passport) => {
       if (passport?.rooms?.chat_id) {
         let success = false;
         while (!success) {
           try {
-            await bot.api.sendMessage(
+            await botNeuroCalls.api.sendMessage(
               Number(passport.rooms.chat_id),
               `${translated_text}\n${assignee}`,
             );

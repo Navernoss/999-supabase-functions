@@ -4,6 +4,7 @@ import {
   SelectIzbushkaError,
   SupabaseResponse,
 } from "../types/index.ts";
+import { getUid } from "./users.ts";
 
 export const getRoomById = async (
   room_id: string,
@@ -44,10 +45,12 @@ export const getRoomsWater = async (
   username: string,
 ): Promise<RoomNode[]> => {
   try {
+    const uid = await getUid(username);
+
     const { data, error } = await supabase
       .from("user_passport")
       .select(`*, rooms(id, name, chat_id, type, codes)`)
-      .eq("username", username)
+      .eq("user_id", uid)
       .eq("is_owner", false)
       .eq("type", "room");
 
@@ -71,10 +74,11 @@ export const getRooms = async (
   username: string,
 ): Promise<RoomNode[]> => {
   try {
+    const uid = await getUid(username);
     const { data, error } = await supabase
       .from("rooms")
       .select("*")
-      .eq("username", username);
+      .eq("user_id", uid);
 
     if (error) {
       throw new Error("Error getRooms: " + error);
